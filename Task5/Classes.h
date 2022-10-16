@@ -63,3 +63,91 @@ public:
 };
 
 const double FindDeterminant(const Matrix& M);
+
+class BaseException 
+{
+protected:
+	string TextOfMessage;
+public:
+	virtual const string& ShowMessage() = 0;
+};
+
+class ArithmeticalExceptions : public BaseException
+{
+public:
+	ArithmeticalExceptions();
+	ArithmeticalExceptions(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class DivisionByZero final : public ArithmeticalExceptions
+{
+public:
+	DivisionByZero();
+	DivisionByZero(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class MatricesDoNotMatchException final : public ArithmeticalExceptions 
+{
+public:
+	MatricesDoNotMatchException();
+	MatricesDoNotMatchException(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class DeterminantWasEqualToZeroException final : public ArithmeticalExceptions
+{
+public: 
+	DeterminantWasEqualToZeroException();
+	DeterminantWasEqualToZeroException(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class MatricesCanNotBeComparedException final : public ArithmeticalExceptions 
+{
+public:
+	MatricesCanNotBeComparedException();
+	MatricesCanNotBeComparedException(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class ConversionExceptions : public BaseException
+{
+public:
+	ConversionExceptions();
+	ConversionExceptions(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class CharacterIsNotANumberException : public ConversionExceptions
+{
+public:
+	CharacterIsNotANumberException();
+	CharacterIsNotANumberException(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class OverflowExceptions : public BaseException 
+{
+public:
+	OverflowExceptions();
+	OverflowExceptions(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class OverflowWhenAddingMatrices final : public OverflowExceptions 
+{
+public:
+	OverflowWhenAddingMatrices();
+	OverflowWhenAddingMatrices(const string& ErrorText);
+	virtual const string& GetMessage();
+};
+
+class OverflowWhenSubtractingMatrices final : public OverflowExceptions 
+{
+public:
+	OverflowWhenSubtractingMatrices();
+	OverflowWhenSubtractingMatrices(const string& ErrorText);
+	virtual const string& GetMessage();
+};

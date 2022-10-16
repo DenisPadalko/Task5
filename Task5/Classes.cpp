@@ -90,6 +90,7 @@ Matrix::Matrix(const char* AnotherMatrix) : Lines(0), Columns(1)
 	const char s[6] = "[];, ";
 	char* Number;
 	char* NextNumber;
+	// add CharacterIsNotANumber
 	Number = strtok_s((char*)AnotherMatrix, s, &NextNumber);
 	for (i = 0; i < Lines; ++i)
 	{
@@ -234,6 +235,7 @@ void Matrix::SetColumns(const int Number)
 
 const Matrix operator+ (const Matrix& Left, const Matrix& Right)
 {
+	// add MatricesDoNotMatchException
 	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
 	{
 		cout << "Failed to add matrices" << endl;
@@ -250,6 +252,7 @@ const Matrix operator+ (const Matrix& Left, const Matrix& Right)
 	{
 		for (size_t j = 0; j < Columns; ++j)
 		{
+			// add OverflowException
 			if (((Right.MatrixElements[i][j] > 0) && (Left.MatrixElements[i][j] > (DBL_MAX - Right.MatrixElements[i][j]))) ||
 				((Right.MatrixElements[i][j] < 0) && (Left.MatrixElements[i][j] < (DBL_MIN - Right.MatrixElements[i][j]))))
 			{
@@ -969,3 +972,114 @@ const bool operator!=(const Matrix& Left, const Matrix& Right)
 	}
 	return Result;
 };
+
+ArithmeticalExceptions::ArithmeticalExceptions()
+{
+	TextOfMessage = "Error. Arithmetical exception.";
+}
+
+ArithmeticalExceptions::ArithmeticalExceptions(const string& ErrorText) 
+{
+	TextOfMessage = ErrorText;
+}
+
+const string& ArithmeticalExceptions::GetMessage() 
+{
+	return TextOfMessage;
+}
+
+DivisionByZero::DivisionByZero() : ArithmeticalExceptions()
+{}
+
+DivisionByZero::DivisionByZero(const string& ErrorText) : ArithmeticalExceptions(ErrorText) 
+{}
+
+const string& DivisionByZero::GetMessage() 
+{
+	return TextOfMessage;
+}
+
+MatricesDoNotMatchException::MatricesDoNotMatchException() : ArithmeticalExceptions()
+{}
+
+MatricesDoNotMatchException::MatricesDoNotMatchException(const string& ErrorText) : ArithmeticalExceptions(ErrorText) 
+{}
+
+const string& MatricesDoNotMatchException::GetMessage()
+{
+	return TextOfMessage;
+}
+
+DeterminantWasEqualToZeroException::DeterminantWasEqualToZeroException() : ArithmeticalExceptions() 
+{}
+
+DeterminantWasEqualToZeroException::DeterminantWasEqualToZeroException(const string& ErrorText) : ArithmeticalExceptions(ErrorText) 
+{}
+
+const string& DeterminantWasEqualToZeroException::GetMessage() 
+{
+	return TextOfMessage;
+}
+
+MatricesCanNotBeComparedException::MatricesCanNotBeComparedException() : ArithmeticalExceptions() 
+{}
+
+MatricesCanNotBeComparedException::MatricesCanNotBeComparedException(const string& ErrorText) : ArithmeticalExceptions(ErrorText) 
+{}
+
+const string& MatricesCanNotBeComparedException::GetMessage() 
+{
+	return TextOfMessage;
+}
+
+ConversionExceptions::ConversionExceptions() 
+{
+	TextOfMessage = "Error. Conversion exception.";
+}
+
+ConversionExceptions::ConversionExceptions(const string& ErrorText) 
+{
+	TextOfMessage = ErrorText;
+}
+
+const string& ConversionExceptions::GetMessage() 
+{
+	return TextOfMessage;
+}
+
+CharacterIsNotANumberException::CharacterIsNotANumberException() : ConversionExceptions() 
+{}
+
+CharacterIsNotANumberException::CharacterIsNotANumberException(const string& ErrorText) : ConversionExceptions(ErrorText) 
+{}
+
+const string& CharacterIsNotANumberException::GetMessage() 
+{
+	return TextOfMessage;
+}
+
+OverflowExceptions::OverflowExceptions()
+{
+	TextOfMessage = "Error. Overflow exception";
+}
+
+OverflowExceptions::OverflowExceptions(const string& ErrorText) 
+{
+	TextOfMessage = ErrorText;
+}
+
+const string& OverflowExceptions::GetMessage() 
+{
+	return TextOfMessage;
+}
+
+OverflowWhenAddingMatrices::OverflowWhenAddingMatrices() : OverflowExceptions() 
+{}
+
+OverflowWhenAddingMatrices::OverflowWhenAddingMatrices(const string& ErrorText) : OverflowExceptions(ErrorText) 
+{}
+
+const string& OverflowWhenAddingMatrices::GetMessage() 
+{
+	return TextOfMessage;
+}
