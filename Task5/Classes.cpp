@@ -1206,17 +1206,6 @@ const string& ConversionExceptions::GetMessage() const
 	return TextOfMessage;
 }
 
-CharacterIsNotANumber::CharacterIsNotANumber() : ConversionExceptions() 
-{}
-
-CharacterIsNotANumber::CharacterIsNotANumber(const string& ErrorText) : ConversionExceptions(ErrorText) 
-{}
-
-const string& CharacterIsNotANumber::GetMessage() const
-{
-	return TextOfMessage;
-}
-
 OverflowExceptions::OverflowExceptions()
 {
 	TextOfMessage = "Error. Overflow exception";

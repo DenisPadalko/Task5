@@ -120,14 +120,6 @@ public:
 	virtual const string& GetMessage() const;
 };
 
-class CharacterIsNotANumber : public ConversionExceptions
-{
-public:
-	CharacterIsNotANumber();
-	CharacterIsNotANumber(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
 class OverflowExceptions : public BaseException 
 {
 public:
