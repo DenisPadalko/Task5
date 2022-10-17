@@ -69,7 +69,7 @@ class BaseException
 protected:
 	string TextOfMessage;
 public:
-	virtual const string& ShowMessage() = 0;
+	virtual const string& GetMessage() const = 0;
 };
 
 class ArithmeticalExceptions : public BaseException
@@ -77,7 +77,7 @@ class ArithmeticalExceptions : public BaseException
 public:
 	ArithmeticalExceptions();
 	ArithmeticalExceptions(const string& ErrorText);
-	virtual const string& GetMessage();
+	virtual const string& GetMessage() const;
 };
 
 class DivisionByZero final : public ArithmeticalExceptions
@@ -85,31 +85,31 @@ class DivisionByZero final : public ArithmeticalExceptions
 public:
 	DivisionByZero();
 	DivisionByZero(const string& ErrorText);
-	virtual const string& GetMessage();
+	virtual const string& GetMessage() const;
 };
 
-class MatricesDoNotMatchException final : public ArithmeticalExceptions 
+class MatricesDoNotMatch final : public ArithmeticalExceptions 
 {
 public:
-	MatricesDoNotMatchException();
-	MatricesDoNotMatchException(const string& ErrorText);
-	virtual const string& GetMessage();
+	MatricesDoNotMatch();
+	MatricesDoNotMatch(const string& ErrorText);
+	virtual const string& GetMessage() const;
 };
 
-class DeterminantWasEqualToZeroException final : public ArithmeticalExceptions
+class DeterminantWasEqualToZero final : public ArithmeticalExceptions
 {
 public: 
-	DeterminantWasEqualToZeroException();
-	DeterminantWasEqualToZeroException(const string& ErrorText);
-	virtual const string& GetMessage();
+	DeterminantWasEqualToZero();
+	DeterminantWasEqualToZero(const string& ErrorText);
+	virtual const string& GetMessage() const;
 };
 
-class MatricesCanNotBeComparedException final : public ArithmeticalExceptions 
+class MatricesCanNotBeCompared final : public ArithmeticalExceptions 
 {
 public:
-	MatricesCanNotBeComparedException();
-	MatricesCanNotBeComparedException(const string& ErrorText);
-	virtual const string& GetMessage();
+	MatricesCanNotBeCompared();
+	MatricesCanNotBeCompared(const string& ErrorText);
+	virtual const string& GetMessage() const;
 };
 
 class ConversionExceptions : public BaseException
@@ -117,15 +117,15 @@ class ConversionExceptions : public BaseException
 public:
 	ConversionExceptions();
 	ConversionExceptions(const string& ErrorText);
-	virtual const string& GetMessage();
+	virtual const string& GetMessage() const;
 };
 
-class CharacterIsNotANumberException : public ConversionExceptions
+class CharacterIsNotANumber : public ConversionExceptions
 {
 public:
-	CharacterIsNotANumberException();
-	CharacterIsNotANumberException(const string& ErrorText);
-	virtual const string& GetMessage();
+	CharacterIsNotANumber();
+	CharacterIsNotANumber(const string& ErrorText);
+	virtual const string& GetMessage() const;
 };
 
 class OverflowExceptions : public BaseException 
@@ -133,7 +133,7 @@ class OverflowExceptions : public BaseException
 public:
 	OverflowExceptions();
 	OverflowExceptions(const string& ErrorText);
-	virtual const string& GetMessage();
+	virtual const string& GetMessage() const;
 };
 
 class OverflowWhenAddingMatrices final : public OverflowExceptions 
@@ -141,7 +141,7 @@ class OverflowWhenAddingMatrices final : public OverflowExceptions
 public:
 	OverflowWhenAddingMatrices();
 	OverflowWhenAddingMatrices(const string& ErrorText);
-	virtual const string& GetMessage();
+	virtual const string& GetMessage() const;
 };
 
 class OverflowWhenSubtractingMatrices final : public OverflowExceptions 
@@ -149,5 +149,5 @@ class OverflowWhenSubtractingMatrices final : public OverflowExceptions
 public:
 	OverflowWhenSubtractingMatrices();
 	OverflowWhenSubtractingMatrices(const string& ErrorText);
-	virtual const string& GetMessage();
+	virtual const string& GetMessage() const;
 };
