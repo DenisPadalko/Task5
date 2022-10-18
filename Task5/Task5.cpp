@@ -18,7 +18,15 @@ int main()
 		}
 	}
 	Matrix AnotherMatrix((const double**)Array, Lines, Columns);
-	Matrix Result = M / AnotherMatrix;
+	try
+	{
+		double Determinant = FindDeterminant(M);
+		if (!Determinant) throw DeterminantWasEqualToZero("Determinant of this matrix was equal to 0");
+	}
+	catch (const DeterminantWasEqualToZero& Ex)
+	{
+		cout << Ex.GetMessage() << endl;
+	}
 	for (int i = 0; i < Lines; ++i) 
 	{
 		delete[] Array[i];
@@ -39,12 +47,32 @@ int main()
 		}
 	}
 	Matrix OneMoreMatrix((const double**)Array, Lines, Columns);
-	Result = M / OneMoreMatrix;
-	//TheDivisorWasEqualToZero Exception
-	Result = M / 0;
+	Matrix Result;
+	try
+	{
+		Result = M * OneMoreMatrix;
+	}
+	catch (const MatricesDoNotMatch& Ex)
+	{
+		cout << Ex.GetMessage() << endl;
+	}
 	//MatricesCanNotBeCompared Exception
-	bool BooleanResult = M == OneMoreMatrix;
+	try
+	{
+		bool BooleanResult = M == OneMoreMatrix;
+	}
+	catch(const MatricesCanNotBeCompared& Ex)
+	{
+		cout << Ex.GetMessage() << endl;
+	}
 	//OverflowWhenAddingMatrices Exception
-	Result = M + 123123123123;
+	try
+	{
+		Result = M + 123123123123;
+	}
+	catch (const OverflowWhenAddingMatrices& Ex)
+	{
+		cout << Ex.GetMessage() << endl;
+	}
 	return 0;
 }

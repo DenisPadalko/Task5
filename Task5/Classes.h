@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <limits.h>
+#include "Exceptions.h"
 
 using namespace std;
 class Matrix
@@ -39,9 +40,6 @@ public:
 	friend const Matrix operator* (const Matrix& Left, const Matrix& Right);
 	friend const Matrix operator* (const Matrix& Left, const int Number);
 	friend const Matrix operator* (const Matrix& Left, const char* Str);
-	friend const Matrix operator/ (const Matrix& Left, const Matrix& Right);
-	friend const Matrix operator/ (const Matrix& Left, const int Number);
-	friend const Matrix operator/ (const Matrix& Left, const char* Str);
 
 	const Matrix& operator+=(const Matrix& AnotherMatrix);
 	const Matrix& operator+=(const int Number);
@@ -49,8 +47,6 @@ public:
 	const Matrix& operator-=(const int Number);
 	const Matrix& operator*=(const Matrix& AnotherMatrix);
 	const Matrix& operator*=(const int Number);
-	const Matrix& operator/=(const Matrix& AnotherMatrix);
-	const Matrix& operator/=(const int Number);
 
 	friend const bool operator<(const Matrix& Left, const Matrix& Right);
 	friend const bool operator>(const Matrix& Left, const Matrix& Right);
@@ -63,83 +59,3 @@ public:
 };
 
 const double FindDeterminant(const Matrix& M);
-
-class BaseException 
-{
-protected:
-	string TextOfMessage;
-public:
-	virtual const string& GetMessage() const = 0;
-};
-
-class ArithmeticalExceptions : public BaseException
-{
-public:
-	ArithmeticalExceptions();
-	ArithmeticalExceptions(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class DivisionByZero final : public ArithmeticalExceptions
-{
-public:
-	DivisionByZero();
-	DivisionByZero(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class MatricesDoNotMatch final : public ArithmeticalExceptions 
-{
-public:
-	MatricesDoNotMatch();
-	MatricesDoNotMatch(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class DeterminantWasEqualToZero final : public ArithmeticalExceptions
-{
-public: 
-	DeterminantWasEqualToZero();
-	DeterminantWasEqualToZero(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class MatricesCanNotBeCompared final : public ArithmeticalExceptions 
-{
-public:
-	MatricesCanNotBeCompared();
-	MatricesCanNotBeCompared(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class ConversionExceptions : public BaseException
-{
-public:
-	ConversionExceptions();
-	ConversionExceptions(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class OverflowExceptions : public BaseException 
-{
-public:
-	OverflowExceptions();
-	OverflowExceptions(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class OverflowWhenAddingMatrices final : public OverflowExceptions 
-{
-public:
-	OverflowWhenAddingMatrices();
-	OverflowWhenAddingMatrices(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
-
-class OverflowWhenSubtractingMatrices final : public OverflowExceptions 
-{
-public:
-	OverflowWhenSubtractingMatrices();
-	OverflowWhenSubtractingMatrices(const string& ErrorText);
-	virtual const string& GetMessage() const;
-};
