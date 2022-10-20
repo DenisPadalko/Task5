@@ -339,15 +339,11 @@ const Matrix operator- (const Matrix& Left, const int Number)
 	{
 		for (size_t j = 0; j < Left.Columns; ++j)
 		{
-			if (i == j)
+			if (IsThereAnOverflowWhenSubtracting(Left.MatrixElements[i][j], Number))
 			{
-				if (IsThereAnOverflowWhenSubtracting(Left.MatrixElements[i][j], Number))
-				{
-					throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
-				}
-				else MatrixElements[i][j] = Left.MatrixElements[i][j] - Number;
+				throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
 			}
-			else MatrixElements[i][j] = Left.MatrixElements[i][j];
+			else MatrixElements[i][j] = Left.MatrixElements[i][j] - Number;
 		}
 	}
 	return Matrix((const double**)MatrixElements, Left.Lines, Left.Columns);
@@ -690,59 +686,17 @@ const bool operator<(const Matrix& Left, const Matrix& Right)
 
 const bool operator>(const Matrix& Left, const Matrix& Right)
 {
-	if (&Left == &Right) return false;
-	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
-	{
-		throw MatricesCanNotBeCompared("Those matrices cannot be compared");
-	}
-	bool Result = false;
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			if (Left.MatrixElements[i][j] > Right.MatrixElements[i][j]) Result = true;
-			else Result = false;
-		}
-	}
-	return Result;
+	return Right < Left;
 };
 
 const bool operator>=(const Matrix& Left, const Matrix& Right)
 {
-	if (&Left == &Right) return true;
-	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
-	{
-		throw MatricesCanNotBeCompared("Those matrices cannot be compared");
-	}
-	bool Result = false;
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			if (Left.MatrixElements[i][j] >= Right.MatrixElements[i][j]) Result = true;
-			else Result = false;
-		}
-	}
-	return Result;
+	return !(Left < Right);
 };
 
 const bool operator<=(const Matrix& Left, const Matrix& Right)
 {
-	if (&Left == &Right) return true;
-	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
-	{
-		throw MatricesCanNotBeCompared("Those matrices cannot be compared");
-	}
-	bool Result = false;
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			if (Left.MatrixElements[i][j] <= Right.MatrixElements[i][j]) Result = true;
-			else Result = false;
-		}
-	}
-	return Result;
+	return !(Left > Right);
 };
 
 const bool operator==(const Matrix& Left, const Matrix& Right)
@@ -766,19 +720,5 @@ const bool operator==(const Matrix& Left, const Matrix& Right)
 
 const bool operator!=(const Matrix& Left, const Matrix& Right)
 {
-	if (&Left == &Right) return false;
-	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
-	{
-		throw MatricesCanNotBeCompared("Those matrices cannot be compared");
-	}
-	bool Result = false;
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			if (Left.MatrixElements[i][j] != Right.MatrixElements[i][j]) Result = true;
-			else Result = false;
-		}
-	}
-	return Result;
+	return !(Left == Right);
 };
