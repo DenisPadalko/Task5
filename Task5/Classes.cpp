@@ -232,6 +232,12 @@ void Matrix::SetColumns(const int Number)
 	Columns = Number;
 };
 
+const bool IsThereAnOverflowWhenAdding(const double FirstNumber, const double SecondNumber)
+{
+	return ((SecondNumber > 0) && (FirstNumber > (DBL_MAX - SecondNumber))) ||
+		((SecondNumber < 0) && (FirstNumber < (DBL_MIN - SecondNumber)));
+}
+
 const Matrix operator+ (const Matrix& Left, const Matrix& Right)
 {
 	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
@@ -249,8 +255,7 @@ const Matrix operator+ (const Matrix& Left, const Matrix& Right)
 	{
 		for (size_t j = 0; j < Columns; ++j)
 		{
-			if (((Right.MatrixElements[i][j] > 0) && (Left.MatrixElements[i][j] > (DBL_MAX - Right.MatrixElements[i][j]))) ||
-				((Right.MatrixElements[i][j] < 0) && (Left.MatrixElements[i][j] < (DBL_MIN - Right.MatrixElements[i][j]))))
+			if (IsThereAnOverflowWhenAdding(Left.MatrixElements[i][j], Right.MatrixElements[i][j]))
 			{
 				throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
 			}
@@ -274,16 +279,11 @@ const Matrix operator+ (const Matrix& Left, const int Number)
 	{
 		for (size_t j = 0; j < Left.Columns; ++j)
 		{
-			if (i == j)
+			if (IsThereAnOverflowWhenAdding(Left.MatrixElements[i][j], Number))
 			{
-				if (((Number > 0) && (Left.MatrixElements[i][j] > (DBL_MAX - Number))) ||
-					((Number < 0) && (Left.MatrixElements[i][j] < (DBL_MIN - Number))))
-				{
-					throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
-				}
-				else MatrixElements[i][j] = Left.MatrixElements[i][j] + Number;
+				throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
 			}
-			else MatrixElements[i][j] = Left.MatrixElements[i][j];
+			else MatrixElements[i][j] = Left.MatrixElements[i][j] + Number;
 		}
 	}
 	return Matrix((const double**)MatrixElements, Left.Lines, Left.Columns);
@@ -293,6 +293,12 @@ const Matrix operator+ (const Matrix& Left, const char* Str)
 {
 	return Left + atoi(Str);
 };
+
+const bool IsThereAnOverflowWhenSubtracting(const double FirstNumber, const double SecondNumber) 
+{
+	return ((SecondNumber > 0) && (FirstNumber < (DBL_MIN + SecondNumber))) ||
+		((SecondNumber < 0) && (FirstNumber > (DBL_MAX + SecondNumber)));
+}
 
 const Matrix operator- (const Matrix& Left, const Matrix& Right)
 {
@@ -309,8 +315,7 @@ const Matrix operator- (const Matrix& Left, const Matrix& Right)
 	{
 		for (size_t j = 0; j < Left.Columns; ++j)
 		{
-			if (((Right.MatrixElements[i][j] > 0) && (Left.MatrixElements[i][j] < (DBL_MIN + Right.MatrixElements[i][j]))) ||
-				((Right.MatrixElements[i][j] < 0) && (Left.MatrixElements[i][j] > (DBL_MAX + Right.MatrixElements[i][j]))))
+			if (IsThereAnOverflowWhenSubtracting(Left.MatrixElements[i][j], Right.MatrixElements[i][j]))
 			{
 				throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
 			}
@@ -336,8 +341,7 @@ const Matrix operator- (const Matrix& Left, const int Number)
 		{
 			if (i == j)
 			{
-				if (((Number > 0) && (Left.MatrixElements[i][j] < (DBL_MIN + Number))) ||
-					((Number < 0) && (Left.MatrixElements[i][j] > (DBL_MAX + Number))))
+				if (IsThereAnOverflowWhenSubtracting(Left.MatrixElements[i][j], Number))
 				{
 					throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
 				}
@@ -533,21 +537,37 @@ void Matrix::MatrixTransponation()
 	}
 }
 
+const Matrix& Matrix::operator+=(const Matrix& AnotherMatrix)
+{
+	if ((Lines != AnotherMatrix.Lines) || (Columns != AnotherMatrix.Columns))
+	{
+		throw MatricesDoNotMatch("Matrices don't match. Failed to add matrices");
+	}
+	for (size_t i = 0; i < Lines; ++i)
+	{
+		for (size_t j = 0; j < Columns; ++j)
+		{
+			if (IsThereAnOverflowWhenAdding(MatrixElements[i][j], AnotherMatrix.MatrixElements[i][j]))
+			{
+				throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
+			}
+			else MatrixElements[i][j] += AnotherMatrix.MatrixElements[i][j];
+		}
+	}
+	return *this;
+};
+
 const Matrix& Matrix::operator+=(const int Number)
 {
 	for (size_t i = 0; i < Lines; ++i)
 	{
 		for (size_t j = 0; j < Columns; ++j)
 		{
-			if (i == j)
+			if (IsThereAnOverflowWhenAdding(MatrixElements[i][j], Number))
 			{
-				if (((Number > 0) && (MatrixElements[i][j] > (DBL_MAX - Number))) ||
-					((Number < 0) && (MatrixElements[i][j] < (DBL_MIN - Number))))
-				{
-					throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
-				}
-				else MatrixElements[i][j] += Number;
+				throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
 			}
+			else MatrixElements[i][j] += Number;
 		}
 	}
 	return *this;
@@ -563,8 +583,7 @@ const Matrix& Matrix::operator-=(const Matrix& AnotherMatrix)
 	{
 		for (size_t j = 0; j < Columns; ++j)
 		{
-			if (((AnotherMatrix.MatrixElements[i][j] > 0) && (MatrixElements[i][j] < (DBL_MIN + AnotherMatrix.MatrixElements[i][j]))) ||
-				((AnotherMatrix.MatrixElements[i][j] < 0) && (MatrixElements[i][j] > (DBL_MAX + AnotherMatrix.MatrixElements[i][j]))))
+			if (IsThereAnOverflowWhenSubtracting(MatrixElements[i][j], AnotherMatrix.MatrixElements[i][j]))
 			{
 				throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
 			}
@@ -580,14 +599,11 @@ const Matrix& Matrix::operator-=(const int Number)
 	{
 		for (size_t j = 0; j < Columns; ++j)
 		{
-			if (i == j) {
-				if (((Number > 0) && (MatrixElements[i][j] < (DBL_MIN + Number))) ||
-					((Number < 0) && (MatrixElements[i][j] > (DBL_MAX + Number))))
-				{
-					throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
-				}
-				else MatrixElements[i][j] -= Number;
+			if (IsThereAnOverflowWhenSubtracting(MatrixElements[i][j], Number))
+			{
+				throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
 			}
+			else MatrixElements[i][j] -= Number;
 		}
 	}
 	return *this;
