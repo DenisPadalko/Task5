@@ -238,58 +238,17 @@ const bool IsThereAnOverflowWhenAdding(const double FirstNumber, const double Se
 		((SecondNumber < 0) && (FirstNumber < (DBL_MIN - SecondNumber)));
 }
 
-const Matrix operator+ (const Matrix& Left, const Matrix& Right)
+const Matrix operator+ (Matrix& Left, const Matrix& Right)
 {
-	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
-	{
-		throw MatricesDoNotMatch("Failed to add matrices");
-	}
-	int Lines = Left.Lines;
-	int Columns = Left.Columns;
-	double** MatrixElements = new double* [Lines];
-	for (size_t i = 0; i < Lines; ++i)
-	{
-		MatrixElements[i] = new double[Columns];
-	}
-	for (size_t i = 0; i < Lines; ++i)
-	{
-		for (size_t j = 0; j < Columns; ++j)
-		{
-			if (IsThereAnOverflowWhenAdding(Left.MatrixElements[i][j], Right.MatrixElements[i][j]))
-			{
-				throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
-			}
-			else
-			{
-				MatrixElements[i][j] = Left.MatrixElements[i][j] + Right.MatrixElements[i][j];
-			};
-		}
-	}
-	return Matrix((const double**)MatrixElements, Lines, Columns);
+	return Left += Right;
 };
 
-const Matrix operator+ (const Matrix& Left, const int Number)
+const Matrix operator+ (Matrix& Left, const int Number)
 {
-	double** MatrixElements = new double* [Left.Lines];
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		MatrixElements[i] = new double[Left.Columns];
-	}
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			if (IsThereAnOverflowWhenAdding(Left.MatrixElements[i][j], Number))
-			{
-				throw OverflowWhenAddingMatrices("An overflow occurred while adding matrices");
-			}
-			else MatrixElements[i][j] = Left.MatrixElements[i][j] + Number;
-		}
-	}
-	return Matrix((const double**)MatrixElements, Left.Lines, Left.Columns);
+	return Left += Number;
 };
 
-const Matrix operator+ (const Matrix& Left, const char* Str)
+const Matrix operator+ (Matrix& Left, const char* Str)
 {
 	return Left + atoi(Str);
 };
@@ -300,104 +259,32 @@ const bool IsThereAnOverflowWhenSubtracting(const double FirstNumber, const doub
 		((SecondNumber < 0) && (FirstNumber > (DBL_MAX + SecondNumber)));
 }
 
-const Matrix operator- (const Matrix& Left, const Matrix& Right)
+const Matrix operator- (Matrix& Left, const Matrix& Right)
 {
-	if ((Left.Lines != Right.Lines) || (Left.Columns != Right.Columns))
-	{
-		throw MatricesDoNotMatch("Failed to subtract matrices");
-	}
-	double** MatrixElements = new double* [Left.Lines];
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		MatrixElements[i] = new double[Left.Columns];
-	}
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			if (IsThereAnOverflowWhenSubtracting(Left.MatrixElements[i][j], Right.MatrixElements[i][j]))
-			{
-				throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
-			}
-			else
-			{
-				MatrixElements[i][j] = Left.MatrixElements[i][j] - Right.MatrixElements[i][j];
-			};
-		}
-	}
-	return Matrix((const double**)MatrixElements, Left.Lines, Left.Columns);
+	return Left -= Right;
 };
 
-const Matrix operator- (const Matrix& Left, const int Number)
+const Matrix operator- (Matrix& Left, const int Number)
 {
-	double** MatrixElements = new double* [Left.Lines];
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		MatrixElements[i] = new double[Left.Columns];
-	}
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			if (IsThereAnOverflowWhenSubtracting(Left.MatrixElements[i][j], Number))
-			{
-				throw OverflowWhenSubtractingMatrices("An overflow occurred while subtracting matrices");
-			}
-			else MatrixElements[i][j] = Left.MatrixElements[i][j] - Number;
-		}
-	}
-	return Matrix((const double**)MatrixElements, Left.Lines, Left.Columns);
+	return Left -= Number;
 };
 
-const Matrix operator- (const Matrix& Left, const char* Str)
+const Matrix operator- (Matrix& Left, const char* Str)
 {
 	return Left - atoi(Str);
 };
 
-const Matrix operator* (const Matrix& Left, const Matrix& Right)
+const Matrix operator* (Matrix& Left, const Matrix& Right)
 {
-	if (Left.Columns != Right.Lines)
-	{
-		throw MatricesDoNotMatch("Failed to multiply matrices");
-	}
-	double** MatrixElements = new double* [Left.Lines];
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		MatrixElements[i] = new double[Left.Columns];
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			MatrixElements[i][j] = 0;
-			for (size_t k = 0; k < Left.Columns; ++k)
-			{
-				MatrixElements[i][j] += Left.MatrixElements[i][k] * Right.MatrixElements[k][j];
-			}
-			if (MatrixElements[i][j] < 0.000000001)
-			{
-				MatrixElements[i][j] = 0;
-			}
-		}
-	}
-	return Matrix((const double**)MatrixElements, Left.Lines, Left.Columns);
+	return Left *= Right;
 };
 
-const Matrix operator* (const Matrix& Left, const int Number)
+const Matrix operator* (Matrix& Left, const int Number)
 {
-	double** MatrixElements = new double* [Left.Lines];
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		MatrixElements[i] = new double[Left.Columns];
-	}
-	for (size_t i = 0; i < Left.Lines; ++i)
-	{
-		for (size_t j = 0; j < Left.Columns; ++j)
-		{
-			MatrixElements[i][j] = Left.MatrixElements[i][j] * Number;
-		}
-	}
-	return Matrix((const double**)MatrixElements, Left.Lines, Left.Columns);
+	return Left *= Number;
 };
 
-const Matrix operator* (const Matrix& Left, const char* Str)
+const Matrix operator* (Matrix& Left, const char* Str)
 {
 	return Left * atoi(Str);
 };
@@ -633,12 +520,13 @@ const Matrix& Matrix::operator*=(const Matrix& AnotherMatrix)
 	{
 		MatrixElements[i] = new double[AnotherMatrix.Columns];
 	}
+	Columns = AnotherMatrix.Columns;
 	for (size_t i = 0; i < Lines; ++i)
 	{
-		for (size_t j = 0; j < AnotherMatrix.Columns; ++j)
+		for (size_t j = 0; j < Columns; ++j)
 		{
 			MatrixElements[i][j] = 0;
-			for (size_t k = 0; k < AnotherMatrix.Columns; ++k)
+			for (size_t k = 0; k < Columns; ++k)
 			{
 				MatrixElements[i][j] += Temp[i][k] * AnotherMatrix.MatrixElements[k][j];
 			}
@@ -663,7 +551,6 @@ const Matrix& Matrix::operator*=(const int Number)
 	}
 	return *this;
 };
-
 
 const bool operator<(const Matrix& Left, const Matrix& Right)
 {

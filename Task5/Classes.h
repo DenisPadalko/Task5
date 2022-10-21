@@ -31,15 +31,15 @@ public:
 	const size_t GetColumns() const;
 	void SetColumns(const int Number);
 
-	friend const Matrix operator+ (const Matrix& Left, const Matrix& Right);
-	friend const Matrix operator+ (const Matrix& Left, const int Number);
-	friend const Matrix operator+ (const Matrix& Left, const char* Str);
-	friend const Matrix operator- (const Matrix& Left, const Matrix& Right);
-	friend const Matrix operator- (const Matrix& Left, const int Number);
-	friend const Matrix operator- (const Matrix& Left, const char* Str);
-	friend const Matrix operator* (const Matrix& Left, const Matrix& Right);
-	friend const Matrix operator* (const Matrix& Left, const int Number);
-	friend const Matrix operator* (const Matrix& Left, const char* Str);
+	friend const Matrix operator+ (Matrix& Left, const Matrix& Right);
+	friend const Matrix operator+ (Matrix& Left, const int Number);
+	friend const Matrix operator+ (Matrix& Left, const char* Str);
+	friend const Matrix operator- (Matrix& Left, const Matrix& Right);
+	friend const Matrix operator- (Matrix& Left, const int Number);
+	friend const Matrix operator- (Matrix& Left, const char* Str);
+	friend const Matrix operator* (Matrix& Left, const Matrix& Right);
+	friend const Matrix operator* (Matrix& Left, const int Number);
+	friend const Matrix operator* (Matrix& Left, const char* Str);
 
 	const Matrix& operator+=(const Matrix& AnotherMatrix);
 	const Matrix& operator+=(const int Number);
