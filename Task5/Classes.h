@@ -56,6 +56,7 @@ public:
 	friend const bool operator!=(const Matrix& Left, const Matrix& Right);
 
 	void MatrixTransponation();
+	void CreateNullMatrix(const size_t Lines, const size_t Columns);
 };
 
 const double FindDeterminant(const Matrix& M);

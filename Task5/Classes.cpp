@@ -50,11 +50,7 @@ Matrix::Matrix(const Matrix& AnotherMatrix) : Lines(AnotherMatrix.Lines), Column
 
 Matrix::Matrix(Matrix&& AnotherMatrix) : Lines(AnotherMatrix.Lines), Columns(AnotherMatrix.Columns), MatrixElements(AnotherMatrix.MatrixElements)
 {
-	for (size_t i = 0; i < AnotherMatrix.Lines; ++i)
-	{
-		delete[] AnotherMatrix.MatrixElements[i];
-	}
-	delete[] AnotherMatrix.MatrixElements;
+	AnotherMatrix.MatrixElements = nullptr;
 };
 
 Matrix::Matrix(const int Number) : Lines(1), Columns(1)
@@ -420,6 +416,22 @@ void Matrix::MatrixTransponation()
 	}
 }
 
+void Matrix::CreateNullMatrix(const size_t Lines, const size_t Columns) 
+{
+	MatrixElements = new double* [Lines];
+	for (size_t i = 0; i < Lines; ++i)
+	{
+		MatrixElements[i] = new double[Columns];
+	}
+	for (size_t i = 0; i < Lines; ++i)
+	{
+		for (size_t j = 0; j < Columns; ++j)
+		{
+			MatrixElements[i][j] = 0;
+		}
+	}
+}
+
 const Matrix& Matrix::operator+=(const Matrix& AnotherMatrix)
 {
 	if ((Lines != AnotherMatrix.Lines) || (Columns != AnotherMatrix.Columns))
@@ -498,45 +510,19 @@ const Matrix& Matrix::operator*=(const Matrix& AnotherMatrix)
 	{
 		throw MatricesDoNotMatch("Matrices don't match. Failed to multiply matrices");
 	}
-	double** Temp = new double* [Lines];
-	for (size_t i = 0; i < Lines; ++i)
-	{
-		Temp[i] = new double[Columns];
-	}
-	for (size_t i = 0; i < Lines; ++i)
-	{
-		for (size_t j = 0; j < Columns; ++j)
-		{
-			Temp[i][j] = MatrixElements[i][j];
-		}
-	}
-	for (size_t i = 0; i < Lines; ++i)
-	{
-		delete[] MatrixElements[i];
-	}
-	delete[] MatrixElements;
-	MatrixElements = new double* [Lines];
-	for (size_t i = 0; i < Lines; ++i)
-	{
-		MatrixElements[i] = new double[AnotherMatrix.Columns];
-	}
+	Matrix Temp = move(*this);
 	Columns = AnotherMatrix.Columns;
+	CreateNullMatrix(Lines, Columns);
 	for (size_t i = 0; i < Lines; ++i)
 	{
 		for (size_t j = 0; j < Columns; ++j)
 		{
-			MatrixElements[i][j] = 0;
-			for (size_t k = 0; k < Columns; ++k)
+			for (size_t k = 0; k < AnotherMatrix.Lines; ++k)
 			{
-				MatrixElements[i][j] += Temp[i][k] * AnotherMatrix.MatrixElements[k][j];
+				MatrixElements[i][j] += Temp.MatrixElements[i][k] * AnotherMatrix.MatrixElements[k][j];
 			}
 		}
 	}
-	for (size_t i = 0; i < Lines; ++i)
-	{
-		delete[] Temp[i];
-	}
-	delete[] Temp;
 	return *this;
 };
 
