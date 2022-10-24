@@ -234,17 +234,17 @@ const bool IsThereAnOverflowWhenAdding(const double FirstNumber, const double Se
 		((SecondNumber < 0) && (FirstNumber < (DBL_MIN - SecondNumber)));
 }
 
-const Matrix operator+ (Matrix& Left, const Matrix& Right)
+const Matrix operator+ (Matrix Left, const Matrix& Right)
 {
 	return Left += Right;
 };
 
-const Matrix operator+ (Matrix& Left, const int Number)
+const Matrix operator+ (Matrix Left, const int Number)
 {
 	return Left += Number;
 };
 
-const Matrix operator+ (Matrix& Left, const char* Str)
+const Matrix operator+ (Matrix Left, const char* Str)
 {
 	return Left + atoi(Str);
 };
@@ -255,32 +255,32 @@ const bool IsThereAnOverflowWhenSubtracting(const double FirstNumber, const doub
 		((SecondNumber < 0) && (FirstNumber > (DBL_MAX + SecondNumber)));
 }
 
-const Matrix operator- (Matrix& Left, const Matrix& Right)
+const Matrix operator- (Matrix Left, const Matrix& Right)
 {
 	return Left -= Right;
 };
 
-const Matrix operator- (Matrix& Left, const int Number)
+const Matrix operator- (Matrix Left, const int Number)
 {
 	return Left -= Number;
 };
 
-const Matrix operator- (Matrix& Left, const char* Str)
+const Matrix operator- (Matrix Left, const char* Str)
 {
 	return Left - atoi(Str);
 };
 
-const Matrix operator* (Matrix& Left, const Matrix& Right)
+const Matrix operator* (Matrix Left, const Matrix& Right)
 {
 	return Left *= Right;
 };
 
-const Matrix operator* (Matrix& Left, const int Number)
+const Matrix operator* (Matrix Left, const int Number)
 {
 	return Left *= Number;
 };
 
-const Matrix operator* (Matrix& Left, const char* Str)
+const Matrix operator* (Matrix Left, const char* Str)
 {
 	return Left * atoi(Str);
 };
